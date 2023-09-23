@@ -13,9 +13,14 @@ const client = new Client({
 });
 
 (async () => {
-    await mongoose.connect();
-    
-    eventHandler(client);
+    try{
+        await mongoose.connect(process.env.MONGODB_URI, { keepAlive: true });
+        console.log("Connecté à la DB.");
+        
+        eventHandler(client);
+    } catch (error) {
+        console.log(`Erreur: ${error}`);
+    }
 })();
 
 client.login(process.env.TOKEN);
